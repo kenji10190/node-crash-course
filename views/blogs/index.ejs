@@ -1,0 +1,28 @@
+<html lang="en">
+
+<!-- ejsのincludeはほかのejsファイルの内容を持ってくることができます -->
+<!-- これにより各ページで同じnavなどを一括管理することが可能です。 -->
+<!-- こういった使い方をpartialといい、再利用可能なテンプレートのことを言います。 -->
+<%- include("../partials/head.ejs") %>
+
+<body>
+    <%- include("../partials/nav.ejs") %>
+    <div class="blogs content">
+        <h2>All Blogs</h2>
+        <!-- 以下のhtmlタグはejs側で保管しており、条件に当てはまらなければ出力されません。 -->
+        <!-- 1行ごとにタグを閉じないと正しく機能しません。 -->
+        <% if (blogs.length > 0){ %>
+            <% blogs.forEach(blog => { %>
+                <a class="single" href="/blogs/<%= blog._id %>">
+                    <h3 class="title"><%= blog.title %></h3>
+                    <p class="snippet"><%= blog.snippet %></p>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <p>There are no blogs to display...</p>
+        <% } %>
+    </div>
+
+    <%- include("../partials/footer.ejs") %>
+</body>
+</html>

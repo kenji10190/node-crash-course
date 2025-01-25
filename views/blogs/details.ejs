@@ -1,0 +1,44 @@
+<html lang="en">
+
+<%- include("../partials/head.ejs") %>
+
+<body>
+    <%- include("../partials/nav.ejs") %>
+
+    <div class="details content">
+        <h2><%= blog.title %></h2>
+        <div class="content">
+            <p><%= blog.body %></p>
+        </div>
+        <a class="delete" data-doc="<%= blog._id %>">
+            <img src="/trashcan.svg" alt="delete icon">
+        </a>
+    </div>
+
+    <%- include("../partials/footer.ejs") %>
+
+    <script>
+        // html要素を取得します。
+        const trashcan = document.querySelector("a.delete");
+        // deleteボタンをクリックされると、ブログIDが入ったurlが作られます。
+        trashcan.addEventListener("click", (e) => {
+            const endpoint = `/blogs/${trashcan.dataset.doc}`;
+            
+            // 作られたurlでサーバーに対し、deleteリクエストを送ります。
+            // このfetchメソッドはajaxでリクエストを送ります。
+            fetch(endpoint, {
+                method: "DELETE"
+            // リダイレクト情報を受け取り、jsonオブジェクトにします。
+            // これはthen(response => response.json())と書いても同じです。
+            // 上記を省略記法の暗黙returnと下記をブロック記法と言います。
+            }).then((response) => {
+                return response.json()
+            }).then((data) => {
+                return window.location.href = data.redirect;
+            }).catch(err => {
+                console.log(err)
+            });
+        })
+    </script>
+</body>
+</html>
